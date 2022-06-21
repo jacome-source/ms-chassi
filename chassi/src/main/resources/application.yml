@@ -1,0 +1,24 @@
+# Application Properties
+# Mudado para formato YAML
+
+# Configuração de Logs
+logging:
+  pattern:
+    dateformat: "HH:mm:ss.SSS"
+  file:
+    name: log/microservice-chassis.log
+
+# Configuração da Aplicação  
+spring:
+  application:
+    name: chassi
+  main:
+    banner-mode: OFF
+  devtools:
+    restart:
+      additional-paths:
+      - conf/**
+
+# Configuração da Porta        
+server:
+  port: 8004

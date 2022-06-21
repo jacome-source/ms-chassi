@@ -1,0 +1,86 @@
+plugins {
+	id 'org.springframework.boot' version '2.6.2'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+}
+
+group = 'com.hxchassi.ms'
+version = '1.1.0'
+sourceCompatibility = '17'
+
+configurations {
+	developmentOnly
+	runtimeClasspath {
+		extendsFrom developmentOnly
+	}
+}
+
+
+// Define diretório conf como source folder
+sourceSets {
+    main {
+        java {
+            srcDirs 'conf'
+  		}
+  	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+// ELs utilizados na dependência 
+// Ex: ${springdocVersion}
+ext {
+	set('commonsLangVersion', "3.12.0")
+	set('commonsValidatorVersion', "1.7")
+	set('commonsIoVersion', "2.11.0")
+	set('springCloudVersion', "2021.0.0")
+	set('springdocVersion', "1.6.3")
+	set('springAmqpVersion', "2.4.5")
+	set('jupiterVersion', "5.8.1")
+}
+
+dependencies {
+	// spring boot library
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'	
+	implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
+	implementation 'org.springframework.cloud:spring-cloud-starter-consul-discovery'
+
+	// apache commons library
+	implementation "commons-validator:commons-validator:${commonsValidatorVersion}"	
+	implementation "org.apache.commons:commons-lang3:${commonsLangVersion}"
+	implementation "commons-io:commons-io:${commonsIoVersion}"
+
+	// brokers
+	implementation "org.springframework.amqp:spring-amqp:${springAmqpVersion}"
+	implementation 'org.springframework.kafka:spring-kafka'
+
+	// SpringDoc
+	// Documentação da API
+	implementation "org.springdoc:springdoc-openapi-ui:${springdocVersion}"	
+
+	runtimeOnly 'org.postgresql:postgresql'
+
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	testImplementation "org.junit.jupiter:junit-jupiter-api:${jupiterVersion}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${jupiterVersion}"
+
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+test {
+	useJUnitPlatform()
+}

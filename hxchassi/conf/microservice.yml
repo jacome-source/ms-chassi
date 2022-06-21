@@ -1,0 +1,15 @@
+# Exemplo de Configuração Externa
+
+microservice:
+  title: Chassi de Microserviços
+
+test:  
+  chassi:
+    services:
+      url: http://localhost:8004
+     
+circuit:      
+  chassi:
+    services:
+      url: http://localhost:8005
+        

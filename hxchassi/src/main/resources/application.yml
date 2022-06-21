@@ -1,0 +1,69 @@
+# Application Properties
+# Mudado para formato YAML
+
+# Configuração de Logs
+logging:
+  pattern:
+    dateformat: "HH:mm:ss.SSS"
+  file:
+    name: log/microservice-chassis.log
+
+# Configuração da Aplicação  
+spring:
+  application:
+    name: hxchassi
+  main:
+    banner-mode: OFF
+  devtools:
+    restart:
+      additional-paths:
+      - conf/**
+  # Configuração do service discovery    
+  cloud:
+    consul:
+      discovery:
+        prefer-ip-address: true
+        health-check-path: /ping
+        instance-id: hx-chassi-${random.int}
+  # Configuração do Kafka      
+  kafka:
+    listener:
+      missing-topics-fatal: false
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer        
+    consumer:
+      group-id: generic-topic-cg
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "*"
+  # Configuração da base
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres_user
+    password: postgres_password
+  # Configuração do JPA  
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate.default_schema: ms_chassis_two
+
+#Configuração Feign
+feign:
+  circuitbreaker:
+    enabled: true
+  client:
+    config:
+      # Utilza default para aplicar Retryer em todos os clientes
+      # default
+      # Retryer para cliente específico
+      genericClient:
+        retryer: com.hxchassi.ms.crosscutting.api.client.FeignRetryer  
+
+# Configuração da Porta        
+server:
+  port: 8004
